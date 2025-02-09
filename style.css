@@ -1,0 +1,126 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 0;
+}
+
+.game-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.farmland {
+    width: 200px;
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    border: 5px solid white;
+    border-radius: 10px;
+    position: relative;
+    cursor: pointer;
+    background-image: url("./pixil-frame-0.png"); /* Default idle image */
+}
+
+.score {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.message {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #ff4500;
+}
+
+.shop {
+    margin-top: 20px;
+}
+
+.shop button {
+    margin: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.shop button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    background-color: #000;
+    color: white;
+}
+
+.tooltip {
+position: relative;
+display: inline-block;
+}
+
+
+/* Tooltip styles */
+.tooltip-message {
+position: absolute;
+background-color: #333;
+color: white;
+padding: 5px 10px;
+border-radius: 5px;
+font-size: 14px;
+visibility: hidden;
+opacity: 0;
+transition: opacity 0.3s ease, visibility 0.3s ease;
+z-index: 10;
+}
+
+.tooltip-message.show {
+visibility: visible;
+opacity: 1;
+}
+
+/* Add styling for the prestige button */
+.prestige-button {
+background-color: #add8e6; /* Light blue background */
+border: none;
+padding: 10px 20px;
+font-size: 16px;
+color: black;
+border-radius: 5px;
+cursor: pointer;
+margin: 10px auto; /* Center horizontally */
+display: block; /* Block for centering */
+text-align: center;
+}
+
+.prestige-button:hover {
+background-color: #87ceeb; /* Slightly darker blue on hover */
+}
+
+/* Style the prestige counter at the bottom-right corner */
+.prestige-counter {
+position: fixed;
+bottom: 50px;
+right: 10px;
+font-size: 16px;
+color: black;
+background-color: #f0f0f0;
+padding: 5px 10px;
+border-radius: 5px;
+border: 1px solid #bbb;
+}

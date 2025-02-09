@@ -4,135 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Farmland Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f0f8ff;
-            margin: 0;
-            padding: 0;
-        }
-
-        .game-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .farmland {
-            width: 200px;
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            border: 5px solid #8b4513;
-            border-radius: 10px;
-            position: relative;
-            cursor: pointer;
-            background-image: url("./pixil-frame-0.png"); /* Default idle image */
-        }
-
-        .score {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .message {
-            margin-top: 10px;
-            font-size: 18px;
-            color: #ff4500;
-        }
-
-        .shop {
-            margin-top: 20px;
-        }
-
-        .shop button {
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-        }
-
-        .shop button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-
-       .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            padding: 10px;
-            background-color: #000;
-            color: white;
-        }
-
-        .tooltip {
-        position: relative;
-        display: inline-block;
-    }
-
-   
-    /* Tooltip styles */
-     .tooltip-message {
-        position: absolute;
-        background-color: #333;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        font-size: 14px;
-        visibility: hidden;
-        opacity: 0;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        z-index: 10;
-    }
-
-    .tooltip-message.show {
-        visibility: visible;
-        opacity: 1;
-    }
-
-    /* Add styling for the prestige button */
-    .prestige-button {
-        background-color: #add8e6; /* Light blue background */
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: black;
-        border-radius: 5px;
-        cursor: pointer;
-        margin: 10px auto; /* Center horizontally */
-        display: block; /* Block for centering */
-        text-align: center;
-    }
-
-    .prestige-button:hover {
-        background-color: #87ceeb; /* Slightly darker blue on hover */
-    }
-
-    /* Style the prestige counter at the bottom-right corner */
-    .prestige-counter {
-        position: fixed;
-        bottom: 50px;
-        right: 10px;
-        font-size: 16px;
-        color: black;
-        background-color: #f0f0f0;
-        padding: 5px 10px;
-        border-radius: 5px;
-        border: 1px solid #bbb;
-    }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="codes.js"></script>
+    <script src="progress.js"></script>
+    <script src="upgrades.js"></script>
+    <link rel="icon" type="image/x-icon" href="Favicon.jpg">
 </head>
+
 <body>
     <div class="game-container">
         <div class="farmland" id="farmland"></div>
@@ -148,45 +26,6 @@
     </footer>
 
     <script>
-     // Define a cheat code function
-    function cheatCode() {
-        score += 1000; // Add 1000 to the score
-        scoreDisplay.textContent = score; // Update the score display
-        updateShopButtons(); // Update the shop buttons based on new score
-        console.log("Cheat activated! 1000 score added."); // Confirmation in the console
-    }
-
-    // Reset function to be called from the console
-    function resetGame() {
-    // Reset all game variables
-    score = 0;
-    upgradeLevel = 0;
-    upgradeCost = 5;
-    lawnmowerActive = false;
-    prestigeMultiplier = 1;
-    prestigeCount = 0;
-    selectedCrop = "wheat";
-    growthStage = -1;
-
-    // Clear localStorage
-    localStorage.removeItem('farmlandGame');
-
-    // Update the UI
-    scoreDisplay.textContent = score;
-    buyUpgradeButton.textContent = `Buy Upgrade (Cost: ${upgradeCost})`;
-    lawnmowerButton.disabled = false;
-    lawnmowerButton.textContent = "Buy Lawnmower (100)";
-    prestigeCounter.textContent = `Prestige: ${prestigeCount}`;
-    prestigeButton.style.display = "none";
-    updateShopButtons();
-    updateCropButtons();
-    updateStage();
-
-    console.log("Game has been reset! All progress has been cleared.");
-    }
-
-
-
         const farmland = document.getElementById('farmland');
         const scoreDisplay = document.getElementById('score');
         const message = document.getElementById('message');
@@ -197,11 +36,11 @@
         const wheatButton = document.createElement('button');
         wheatButton.textContent = "W"; // Wheat button
         const tomatoButton = document.createElement('button');
-        tomatoButton.textContent = "T"; // Tomato button (requires 25 score)
+        tomatoButton.textContent = "T (25)"; // Tomato button (requires 25 score)
         const lawnmowerButton = document.createElement('button');
         lawnmowerButton.textContent = "Buy Lawnmower (100)";
         const prestigeButton = document.createElement('button');
-        prestigeButton.textContent = "Prestige (1000)";
+        prestigeButton.textContent = "Prestige (500)";
         prestigeButton.className = "prestige-button"; // Assign CSS class for styling
         prestigeButton.style.display = "none"; // Hidden by default
         shop.appendChild(wheatButton);
@@ -267,53 +106,6 @@
         setTimeout(() => {
             tooltip.classList.remove("show");
         }, 2000);
-    }
-
-        // Save progress to localStorage
-        function saveProgress() {
-            const gameState = {
-                score,
-                upgradeLevel,
-                upgradeCost,
-                lawnmowerActive,
-                selectedCrop,
-                prestigeMultiplier,
-                prestigeCount
-            };
-            localStorage.setItem('farmlandGame', JSON.stringify(gameState));
-        }
-    
-        // Load progress from localStorage
-        function loadProgress() {
-            const savedState = localStorage.getItem('farmlandGame');
-            if (savedState) {
-                const gameState = JSON.parse(savedState);
-                score = gameState.score || 0;
-                upgradeLevel = gameState.upgradeLevel || 0;
-                upgradeCost = gameState.upgradeCost || 5;
-                lawnmowerActive = gameState.lawnmowerActive || false;
-                selectedCrop = gameState.selectedCrop || "wheat";
-                prestigeMultiplier = gameState.prestigeMultiplier || 1;
-                prestigeCount = gameState.prestigeCount || 0;
-    
-                // Update UI based on loaded progress
-                scoreDisplay.textContent = score;
-                updateCropButtons();
-                buyUpgradeButton.textContent = `Buy Upgrade (Cost: ${upgradeCost})`;
-                updateShopButtons();
-                updateStage();
-
-                  // If lawnmower was active, disable its button and show its status
-            if (lawnmowerActive) {
-                lawnmowerButton.disabled = true;
-                lawnmowerButton.textContent = "Lawnmower Active!";
-            }
-
-             // Show the Prestige button if 10 upgrades are reached
-             if (upgradeLevel >= 5) {
-                prestigeButton.style.display = "block";
-            }
-        }
     }
      
     
@@ -396,9 +188,9 @@
 
       // Handle Prestige
     prestigeButton.addEventListener('click', () => {
-        if (score >= 1000) {
-            // Deduct 1000 score
-            score -= 1000;
+        if (score >= 500) {
+            // Deduct 500 score
+            score -= 500;
 
             // Reset game state but increase prestige multiplier
             upgradeLevel = 0;
@@ -406,7 +198,7 @@
             lawnmowerActive = false;
             selectedCrop = "wheat";
             growthStage = -1; // Reset growth
-            prestigeMultiplier *= 2; // Multiply score gain by 10
+            prestigeMultiplier *= 2; // Multiply score gain by 2
             prestigeCount++; // Increment prestige count
 
             // Update UI
@@ -422,7 +214,7 @@
 
             saveProgress(); // Save progress after Prestige
         } else {
-            message.textContent = "You need 1000 score to Prestige!";
+            message.textContent = "You need 500 score to Prestige!";
         }
     });
     
@@ -464,7 +256,7 @@
             buyUpgradeButton.disabled = score < upgradeCost;
             tomatoButton.disabled = score < 25 && selectedCrop !== "tomato"; // Disable until score >= 25
             lawnmowerButton.disabled = lawnmowerActive || score < 100; // Disable if active or not enough score
-            prestigeButton.disabled = score < 1000; // Disable Prestige button until score >= 1000
+            prestigeButton.disabled = score < 500; // Disable Prestige button until score >= 500
         }
 
             // Crop selection buttons
