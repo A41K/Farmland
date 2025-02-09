@@ -117,6 +117,15 @@
     </footer>
 
     <script>
+         // Define a cheat code function
+    function cheatCode() {
+        score += 100; // Add 100 to the score
+        scoreDisplay.textContent = score; // Update the score display
+        updateShopButtons(); // Update the shop buttons based on new score
+        console.log("Cheat activated! 100 score added."); // Confirmation in the console
+    }
+
+
         const farmland = document.getElementById('farmland');
         const scoreDisplay = document.getElementById('score');
         const message = document.getElementById('message');
@@ -148,6 +157,9 @@
         let lawnmowerActive = false; // Lawnmower upgrade is inactive by default
         let selectedCrop = "wheat"; // Default crop is wheat
         let baseGrowthTime = 5000; // Base growth time: 5 seconds
+        let wheatBaseScore = 1; // Base score for wheat
+        let tomatoBaseScore = 2; // Base score for tomato
+
     
         // Paths to sprites for crops
         const crops = {
@@ -271,26 +283,26 @@
     
         // Handle farmland click
         farmland.addEventListener('click', () => {
-            if (growthStage === 3) {
-                // Harvest and reset
-                if (selectedCrop === "wheat") {
-                    score += (1 + upgradeLevel); // Wheat gives 1 score (+ bonus)
-                } else if (selectedCrop === "tomato") {
-                    score += (2 + upgradeLevel); // Tomato gives 2 score (+ bonus)
-                }
-                scoreDisplay.textContent = score;
-                growthStage = -1; // Reset to idle stage (no crop)
-                clearInterval(growthInterval); // Clear growth cycle
-                growthInterval = null;
-                updateStage();
-                updateShopButtons();
-                saveProgress(); // Save after harvest
-            } else if (growthStage === -1) {
-                startGrowthCycle(); // Start the growing process
-            } else {
-                message.textContent = "The crop isn't ready yet!";
+        if (growthStage === 3) {
+            // Manual harvest
+            if (selectedCrop === "wheat") {
+                score += wheatBaseScore * (2 ** upgradeLevel); // Wheat score multiplier
+            } else if (selectedCrop === "tomato") {
+                score += tomatoBaseScore * (2 ** upgradeLevel); // Tomato score multiplier
             }
-        });
+            scoreDisplay.textContent = score;
+            growthStage = -1; // Reset to idle stage (no crop)
+            clearInterval(growthInterval); // Clear growth cycle
+            growthInterval = null;
+            updateStage();
+            updateShopButtons();
+        } else if (growthStage === -1) {
+            startGrowthCycle(); // Start the growing process
+        } else {
+            message.textContent = "The crop isn't ready yet!";
+        }
+    });
+
     
         // Handle shop upgrades
         buyUpgradeButton.addEventListener('click', () => {
@@ -314,6 +326,7 @@
             lawnmowerButton.textContent = "Lawnmower Active!";
             scoreDisplay.textContent = score;
             updateShopButtons();
+            saveProgress(); // Save after upgrading
         } else {
             message.textContent = "You need 100 score to buy the lawnmower!";
         }
