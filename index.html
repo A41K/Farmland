@@ -81,8 +81,8 @@
         display: inline-block;
     }
 
+   
     /* Tooltip styles */
-     /* Tooltip styles */
      .tooltip-message {
         position: absolute;
         background-color: #333;
@@ -139,7 +139,7 @@
         <div class="score">Score: <span id="score">0</span></div>
         <div class="message" id="message">Click on the farmland to plant something!</div>
         <div class="shop" id="shop">
-            <button id="buyUpgrade" disabled>Buy Upgrade (Cost: 10)</button>
+            <button id="buyUpgrade" disabled>Buy Upgrade (Cost: 5)</button>
         </div>
     </div>
 
@@ -148,16 +148,16 @@
     </footer>
 
     <script>
-         // Define a cheat code function
+     // Define a cheat code function
     function cheatCode() {
-        score += 1000; // Add 100 to the score
+        score += 1000; // Add 1000 to the score
         scoreDisplay.textContent = score; // Update the score display
         updateShopButtons(); // Update the shop buttons based on new score
         console.log("Cheat activated! 1000 score added."); // Confirmation in the console
     }
 
     // Reset function to be called from the console
-function resetGame() {
+    function resetGame() {
     // Reset all game variables
     score = 0;
     upgradeLevel = 0;
@@ -183,7 +183,7 @@ function resetGame() {
     updateStage();
 
     console.log("Game has been reset! All progress has been cleared.");
-}
+    }
 
 
 
@@ -269,8 +269,6 @@ function resetGame() {
         }, 2000);
     }
 
-
-    
         // Save progress to localStorage
         function saveProgress() {
             const gameState = {
@@ -408,7 +406,7 @@ function resetGame() {
             lawnmowerActive = false;
             selectedCrop = "wheat";
             growthStage = -1; // Reset growth
-            prestigeMultiplier *= 10; // Multiply score gain by 10
+            prestigeMultiplier *= 2; // Multiply score gain by 10
             prestigeCount++; // Increment prestige count
 
             // Update UI
@@ -445,8 +443,9 @@ function resetGame() {
             }
         }
     });
-          // Handle lawnmower purchase
-        lawnmowerButton.addEventListener('click', () => {
+
+             // Handle lawnmower purchase
+             lawnmowerButton.addEventListener('click', () => {
         if (score >= 100) {
             score -= 100;
             lawnmowerActive = true; // Activate the lawnmower upgrade
@@ -460,8 +459,16 @@ function resetGame() {
         }
     });
     
-        // Crop selection buttons
-        wheatButton.addEventListener('click', () => {
+        // Enable or disable shop buttons based on score
+        function updateShopButtons() {
+            buyUpgradeButton.disabled = score < upgradeCost;
+            tomatoButton.disabled = score < 25 && selectedCrop !== "tomato"; // Disable until score >= 25
+            lawnmowerButton.disabled = lawnmowerActive || score < 100; // Disable if active or not enough score
+            prestigeButton.disabled = score < 1000; // Disable Prestige button until score >= 1000
+        }
+
+            // Crop selection buttons
+            wheatButton.addEventListener('click', () => {
             selectedCrop = "wheat";
             updateCropButtons(); // Update button styles
             updateStage();
@@ -488,14 +495,6 @@ function resetGame() {
                 tomatoButton.style.backgroundColor = "#90ee90"; // Highlight tomato button
                 wheatButton.style.backgroundColor = ""; // Remove highlight from wheat button
             }
-        }
-    
-        // Enable or disable shop buttons based on score
-        function updateShopButtons() {
-            buyUpgradeButton.disabled = score < upgradeCost;
-            tomatoButton.disabled = score < 25 && selectedCrop !== "tomato"; // Disable until score >= 25
-            lawnmowerButton.disabled = lawnmowerActive || score < 100; // Disable if active or not enough score
-            prestigeButton.disabled = score < 1000; // Disable Prestige button until score >= 1000
         }
     
         // Start the game
