@@ -100,6 +100,37 @@
         visibility: visible;
         opacity: 1;
     }
+
+    /* Add styling for the prestige button */
+    .prestige-button {
+        background-color: #add8e6; /* Light blue background */
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: black;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 10px auto; /* Center horizontally */
+        display: block; /* Block for centering */
+        text-align: center;
+    }
+
+    .prestige-button:hover {
+        background-color: #87ceeb; /* Slightly darker blue on hover */
+    }
+
+    /* Style the prestige counter at the bottom-right corner */
+    .prestige-counter {
+        position: fixed;
+        bottom: 50px;
+        right: 10px;
+        font-size: 16px;
+        color: black;
+        background-color: #f0f0f0;
+        padding: 5px 10px;
+        border-radius: 5px;
+        border: 1px solid #bbb;
+    }
     </style>
 </head>
 <body>
@@ -119,11 +150,41 @@
     <script>
          // Define a cheat code function
     function cheatCode() {
-        score += 100; // Add 100 to the score
+        score += 1000; // Add 100 to the score
         scoreDisplay.textContent = score; // Update the score display
         updateShopButtons(); // Update the shop buttons based on new score
-        console.log("Cheat activated! 100 score added."); // Confirmation in the console
+        console.log("Cheat activated! 1000 score added."); // Confirmation in the console
     }
+
+    // Reset function to be called from the console
+function resetGame() {
+    // Reset all game variables
+    score = 0;
+    upgradeLevel = 0;
+    upgradeCost = 5;
+    lawnmowerActive = false;
+    prestigeMultiplier = 1;
+    prestigeCount = 0;
+    selectedCrop = "wheat";
+    growthStage = -1;
+
+    // Clear localStorage
+    localStorage.removeItem('farmlandGame');
+
+    // Update the UI
+    scoreDisplay.textContent = score;
+    buyUpgradeButton.textContent = `Buy Upgrade (Cost: ${upgradeCost})`;
+    lawnmowerButton.disabled = false;
+    lawnmowerButton.textContent = "Buy Lawnmower (100)";
+    prestigeCounter.textContent = `Prestige: ${prestigeCount}`;
+    prestigeButton.style.display = "none";
+    updateShopButtons();
+    updateCropButtons();
+    updateStage();
+
+    console.log("Game has been reset! All progress has been cleared.");
+}
+
 
 
         const farmland = document.getElementById('farmland');
@@ -139,9 +200,20 @@
         tomatoButton.textContent = "T"; // Tomato button (requires 25 score)
         const lawnmowerButton = document.createElement('button');
         lawnmowerButton.textContent = "Buy Lawnmower (100)";
+        const prestigeButton = document.createElement('button');
+        prestigeButton.textContent = "Prestige (1000)";
+        prestigeButton.className = "prestige-button"; // Assign CSS class for styling
+        prestigeButton.style.display = "none"; // Hidden by default
         shop.appendChild(wheatButton);
         shop.appendChild(tomatoButton);
         shop.appendChild(lawnmowerButton);
+        shop.appendChild(prestigeButton);
+
+        // Add the prestige counter to the bottom-right corner
+        const prestigeCounter = document.createElement('div');
+        prestigeCounter.className = "prestige-counter";
+        prestigeCounter.textContent = "Prestige: 0";
+        document.body.appendChild(prestigeCounter);
         
             // Tooltip element
             const tooltip = document.createElement('div');
@@ -159,6 +231,9 @@
         let baseGrowthTime = 5000; // Base growth time: 5 seconds
         let wheatBaseScore = 1; // Base score for wheat
         let tomatoBaseScore = 2; // Base score for tomato
+        let prestigeMultiplier = 1; // Start with no multiplier
+        let prestigeCount = 0; // Track number of prestiges
+
 
     
         // Paths to sprites for crops
@@ -203,7 +278,9 @@
                 upgradeLevel,
                 upgradeCost,
                 lawnmowerActive,
-                selectedCrop
+                selectedCrop,
+                prestigeMultiplier,
+                prestigeCount
             };
             localStorage.setItem('farmlandGame', JSON.stringify(gameState));
         }
@@ -218,6 +295,8 @@
                 upgradeCost = gameState.upgradeCost || 5;
                 lawnmowerActive = gameState.lawnmowerActive || false;
                 selectedCrop = gameState.selectedCrop || "wheat";
+                prestigeMultiplier = gameState.prestigeMultiplier || 1;
+                prestigeCount = gameState.prestigeCount || 0;
     
                 // Update UI based on loaded progress
                 scoreDisplay.textContent = score;
@@ -231,9 +310,14 @@
                 lawnmowerButton.disabled = true;
                 lawnmowerButton.textContent = "Lawnmower Active!";
             }
+
+             // Show the Prestige button if 10 upgrades are reached
+             if (upgradeLevel >= 5) {
+                prestigeButton.style.display = "block";
+            }
         }
     }
-         
+     
     
         // Update farmland stage visually
         function updateStage() {
@@ -293,11 +377,10 @@
         // Handle farmland click
         farmland.addEventListener('click', () => {
         if (growthStage === 3) {
-            // Manual harvest
             if (selectedCrop === "wheat") {
-                score += wheatBaseScore * (2 ** upgradeLevel); // Wheat score multiplier
+                score += wheatBaseScore * prestigeMultiplier * (2 ** upgradeLevel); // Apply prestigeMultiplier
             } else if (selectedCrop === "tomato") {
-                score += tomatoBaseScore * (2 ** upgradeLevel); // Tomato score multiplier
+                score += tomatoBaseScore * prestigeMultiplier * (2 ** upgradeLevel); // Apply prestigeMultiplier
             }
             scoreDisplay.textContent = score;
             growthStage = -1; // Reset to idle stage (no crop)
@@ -305,6 +388,7 @@
             growthInterval = null;
             updateStage();
             updateShopButtons();
+            saveProgress(); // Save progress after manual harvest
         } else if (growthStage === -1) {
             startGrowthCycle(); // Start the growing process
         } else {
@@ -312,6 +396,37 @@
         }
     });
 
+      // Handle Prestige
+    prestigeButton.addEventListener('click', () => {
+        if (score >= 1000) {
+            // Deduct 1000 score
+            score -= 1000;
+
+            // Reset game state but increase prestige multiplier
+            upgradeLevel = 0;
+            upgradeCost = 5;
+            lawnmowerActive = false;
+            selectedCrop = "wheat";
+            growthStage = -1; // Reset growth
+            prestigeMultiplier *= 10; // Multiply score gain by 10
+            prestigeCount++; // Increment prestige count
+
+            // Update UI
+            scoreDisplay.textContent = score;
+            prestigeCounter.textContent = `Prestige: ${prestigeCount}`;
+            prestigeButton.style.display = "none"; // Hide Prestige button until next requirement
+            lawnmowerButton.disabled = false;
+            lawnmowerButton.textContent = "Buy Lawnmower (100)";
+            buyUpgradeButton.textContent = `Buy Upgrade (Cost: ${upgradeCost})`;
+
+            updateShopButtons();
+            updateStage();
+
+            saveProgress(); // Save progress after Prestige
+        } else {
+            message.textContent = "You need 1000 score to Prestige!";
+        }
+    });
     
         // Handle shop upgrades
         buyUpgradeButton.addEventListener('click', () => {
@@ -323,9 +438,13 @@
                 buyUpgradeButton.textContent = `Buy Upgrade (Cost: ${upgradeCost})`;
                 updateShopButtons();
                 saveProgress(); // Save after upgrading
+                
+                 // Show Prestige button if 10 upgrades are reached
+            if (upgradeLevel >= 5) {
+                prestigeButton.style.display = "block";
             }
-        });
-
+        }
+    });
           // Handle lawnmower purchase
         lawnmowerButton.addEventListener('click', () => {
         if (score >= 100) {
@@ -376,6 +495,7 @@
             buyUpgradeButton.disabled = score < upgradeCost;
             tomatoButton.disabled = score < 25 && selectedCrop !== "tomato"; // Disable until score >= 25
             lawnmowerButton.disabled = lawnmowerActive || score < 100; // Disable if active or not enough score
+            prestigeButton.disabled = score < 1000; // Disable Prestige button until score >= 1000
         }
     
         // Start the game
