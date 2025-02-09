@@ -30,6 +30,7 @@
             border-radius: 10px;
             position: relative;
             cursor: pointer;
+            background-image: url("./pixil-frame-0.png"); /* Default idle image */
         }
 
         .score {
@@ -64,7 +65,7 @@
             cursor: not-allowed;
         }
 
-        .footer {
+       .footer {
             position: fixed;
             bottom: 0;
             left: 0;
@@ -80,7 +81,7 @@
     <div class="game-container">
         <div class="farmland" id="farmland"></div>
         <div class="score">Score: <span id="score">0</span></div>
-        <div class="message" id="message"></div>
+        <div class="message" id="message">Click on the farmland to plant something!</div>
         <div class="shop" id="shop">
             <button id="buyUpgrade" disabled>Buy Upgrade (Cost: 10)</button>
         </div>
@@ -95,65 +96,70 @@
         const scoreDisplay = document.getElementById('score');
         const message = document.getElementById('message');
         const buyUpgradeButton = document.getElementById('buyUpgrade');
-
+    
         let score = 0;
-        let growthStage = 0; // Start at idle stage (0)
-        let growthInterval;
+        let growthStage = -1; // No crop planted initially
+        let growthInterval = null;
         let upgradeLevel = 0;
         let upgradeCost = 10;
-
-        // Paths to the sprites
+    
+        // Paths to the sprites for growth stages
         const sprites = [
-            "./pixil-frame-0.png",      // Idle stage
-            "./pixil-frame-0 (1).png",  // Stage 1
-            "./pixil-frame-0 (2).png",  // Stage 2
-            "./pixil-frame-0 (3).png",  // Stage 3
-            "./pixil-frame-0 (4).png"   // Fully grown
+            "./new-idle-image.png",      // Idle stage
+            "./new-growth-stage1.png",  // Stage 1
+            "./new-growth-stage2.png",  // Stage 2
+            "./new-growth-stage3.png",  // Stage 3
+            "./new-growth-stage4.png"   // Fully grown
         ];
-
-        // Update farmland stage
+    
+        // Update farmland stage visually
         function updateStage() {
-            farmland.style.backgroundImage = `url(${sprites[growthStage]})`;
-
-            if (growthStage === 4) {
-                message.textContent = "The farmland is fully grown! Click to harvest.";
-            } else if (growthStage === 0) {
-                message.textContent = "Plant something to start farming!";
+            if (growthStage === -1) {
+                farmland.style.backgroundImage = `url(${sprites[0]})`; // Default idle image
+                message.textContent = "Click on the farmland to plant something!";
             } else {
-                message.textContent = "The farmland is growing...";
+                farmland.style.backgroundImage = `url(${sprites[growthStage + 1]})`;
+                if (growthStage === 3) {
+                    message.textContent = "The crop is fully grown! Click to harvest.";
+                } else {
+                    message.textContent = "The crop is growing...";
+                }
             }
         }
-
+    
         // Start farmland growth cycle
         function startGrowthCycle() {
-            growthStage = 1; // Start growing from stage 1
+            growthStage = 0; // Start at first growth stage
             updateStage();
-
+    
             growthInterval = setInterval(() => {
-                if (growthStage < 4) {
+                if (growthStage < 3) {
                     growthStage++;
                     updateStage();
                 } else {
                     clearInterval(growthInterval); // Stop growing when fully grown
                 }
-            }, 10000); // 10 seconds per stage
+            }, 5000); // 5 seconds per stage
         }
-
+    
         // Handle farmland click
         farmland.addEventListener('click', () => {
-            if (growthStage === 4) {
+            if (growthStage === 3) {
+                // Harvest and reset
                 score += 1 + upgradeLevel; // Add bonus based on upgrades
                 scoreDisplay.textContent = score;
-                growthStage = 0; // Reset to idle stage
+                growthStage = -1; // Reset to idle stage (no crop)
+                clearInterval(growthInterval); // Clear growth cycle
+                growthInterval = null;
                 updateStage();
                 updateShopButtons();
-            } else if (growthStage === 0) {
+            } else if (growthStage === -1) {
                 startGrowthCycle(); // Start the growing process
             } else {
-                message.textContent = "The farmland isn't ready yet!";
+                message.textContent = "The crop isn't ready yet!";
             }
         });
-
+    
         // Handle shop upgrades
         buyUpgradeButton.addEventListener('click', () => {
             if (score >= upgradeCost) {
@@ -165,15 +171,15 @@
                 updateShopButtons();
             }
         });
-
+    
         // Enable or disable shop buttons based on score
         function updateShopButtons() {
             buyUpgradeButton.disabled = score < upgradeCost;
         }
-
+    
         // Start the game
-        updateStage();
-        updateShopButtons();
+        updateStage(); // Initialize farmland stage
+        updateShopButtons(); // Set initial button states
     </script>
 </body>
 </html>
