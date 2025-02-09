@@ -128,8 +128,11 @@
         wheatButton.textContent = "W"; // Wheat button
         const tomatoButton = document.createElement('button');
         tomatoButton.textContent = "T"; // Tomato button (requires 25 score)
+        const lawnmowerButton = document.createElement('button');
+        lawnmowerButton.textContent = "Buy Lawnmower (100)";
         shop.appendChild(wheatButton);
         shop.appendChild(tomatoButton);
+        shop.appendChild(lawnmowerButton);
         
             // Tooltip element
             const tooltip = document.createElement('div');
@@ -142,8 +145,9 @@
         let growthInterval = null;
         let upgradeLevel = 0;
         let upgradeCost = 5;
+        let lawnmowerActive = false; // Lawnmower upgrade is inactive by default
         let selectedCrop = "wheat"; // Default crop is wheat
-        let baseGrowthTime = 10000; // Base growth time: 10 seconds
+        let baseGrowthTime = 5000; // Base growth time: 5 seconds
     
         // Paths to sprites for crops
         const crops = {
@@ -228,24 +232,42 @@
     
         // Start farmland growth cycle
         function startGrowthCycle() {
-            growthStage = 0; // Start at first growth stage
-            updateStage();
-    
-            growthInterval = setInterval(() => {
-                if (growthStage < 3) {
-                    growthStage++;
-                    updateStage();
-                } else {
-                    clearInterval(growthInterval); // Stop growing when fully grown
-                }
-            }, calculateGrowthTime()); // Adjust growth time based on upgrades
-        }
+        growthStage = 0; // Start at first growth stage
+        updateStage();
+
+        growthInterval = setInterval(() => {
+            if (growthStage < 3) {
+                growthStage++;
+                updateStage();
+            }
+
+            if (growthStage === 3 && lawnmowerActive) {
+                harvestAndReplant(); // Automatically harvest and replant
+            }
+        }, calculateGrowthTime()); // Adjust growth time based on upgrades
+    }
     
         // Calculate the growth time based on upgrades
         function calculateGrowthTime() {
             const reducedTime = upgradeLevel * 500; // Each upgrade reduces 0.5 seconds (500ms)
             return Math.max(baseGrowthTime - reducedTime, 2000); // Minimum growth time: 2 seconds
         }
+
+        function harvestAndReplant() {
+        // Harvest crop
+        if (growthStage === 3) {
+            if (selectedCrop === "wheat") {
+                score += (1 + upgradeLevel); // Wheat gives 1 score (+ bonus)
+            } else if (selectedCrop === "tomato") {
+                score += (2 + upgradeLevel); // Tomato gives 2 score (+ bonus)
+            }
+            scoreDisplay.textContent = score;
+
+            // Immediately replant
+            growthStage = 0; // Reset growth to Stage 0
+            updateStage();
+        }
+    }
     
         // Handle farmland click
         farmland.addEventListener('click', () => {
@@ -282,6 +304,20 @@
                 saveProgress(); // Save after upgrading
             }
         });
+
+          // Handle lawnmower purchase
+        lawnmowerButton.addEventListener('click', () => {
+        if (score >= 100) {
+            score -= 100;
+            lawnmowerActive = true; // Activate the lawnmower upgrade
+            lawnmowerButton.disabled = true; // Disable the button after purchase
+            lawnmowerButton.textContent = "Lawnmower Active!";
+            scoreDisplay.textContent = score;
+            updateShopButtons();
+        } else {
+            message.textContent = "You need 100 score to buy the lawnmower!";
+        }
+    });
     
         // Crop selection buttons
         wheatButton.addEventListener('click', () => {
@@ -317,6 +353,7 @@
         function updateShopButtons() {
             buyUpgradeButton.disabled = score < upgradeCost;
             tomatoButton.disabled = score < 25 && selectedCrop !== "tomato"; // Disable until score >= 25
+            lawnmowerButton.disabled = lawnmowerActive || score < 100; // Disable if active or not enough score
         }
     
         // Start the game
