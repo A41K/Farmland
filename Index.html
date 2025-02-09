@@ -82,7 +82,8 @@
     }
 
     /* Tooltip styles */
-    .tooltip-message {
+     /* Tooltip styles */
+     .tooltip-message {
         position: absolute;
         background-color: #333;
         color: white;
@@ -91,7 +92,7 @@
         font-size: 14px;
         visibility: hidden;
         opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
         z-index: 10;
     }
 
@@ -131,10 +132,10 @@
         shop.appendChild(tomatoButton);
         
             // Tooltip element
-        const tooltip = document.createElement('div');
-        tooltip.className = "tooltip-message";
-        tooltip.textContent = "Costs 25 Score";
-        document.body.appendChild(tooltip);
+            const tooltip = document.createElement('div');
+            tooltip.className = "tooltip-message";
+            tooltip.textContent = ""; // Empty by default
+            document.body.appendChild(tooltip);
         
         let score = 0;
         let growthStage = -1; // No crop planted initially
@@ -163,12 +164,12 @@
         };
 
 
-         // Function to show the tooltip
-    function showTooltip(targetElement, message) {
-        tooltip.textContent = message;
+     // Function to show the tooltip
+     function showTooltip(targetElement, message) {
+        tooltip.textContent = message; // Set tooltip text
         const rect = targetElement.getBoundingClientRect(); // Get button position
-        tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
-        tooltip.style.top = `${rect.top - tooltip.offsetHeight - 10}px`; // Position above button
+        tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 10}px`; // Position above button
         tooltip.classList.add("show");
 
         // Hide the tooltip after 2 seconds
@@ -176,6 +177,7 @@
             tooltip.classList.remove("show");
         }, 2000);
     }
+
 
     
         // Save progress to localStorage
@@ -296,7 +298,7 @@
                 updateStage();
                 saveProgress(); // Save after switching crops
             } else {
-                showTooltip(tomatoButton, "Costs 25 Score"); // Show tooltip when not unlocked
+                showTooltip(tomatoButton, "Costs 25 Score"); // Show tooltip when not enough score
             }
         });
     
