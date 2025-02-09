@@ -60,11 +60,11 @@
             tooltip.textContent = ""; // Empty by default
             document.body.appendChild(tooltip);
         
-        let score = 0;
+        let score = 0; // Initial score
         let growthStage = -1; // No crop planted initially
-        let growthInterval = null;
-        let upgradeLevel = 0;
-        let upgradeCost = 5;
+        let growthInterval = null; // No interval initially
+        let upgradeLevel = 0; // Start with no upgrades
+        let upgradeCost = 5; // How much the upgrade costs
         let lawnmowerActive = false; // Lawnmower upgrade is inactive by default
         let selectedCrop = "wheat"; // Default crop is wheat
         let baseGrowthTime = 5000; // Base growth time: 5 seconds
@@ -75,47 +75,47 @@
 
 
     
-        // Paths to sprites for crops
-        const crops = {
-            wheat: [
-                "./wheat-idle.png",      // Idle stage
+            // Paths to sprites for crops
+                const crops = {
+                    wheat: [
+                "./wheat-idle.png",     // Idle stage
                 "./wheat-stage1.png",   // Stage 1
                 "./wheat-stage2.png",   // Stage 2
                 "./wheat-stage3.png",   // Stage 3
                 "./wheat-stage4.png"    // Fully grown
-            ],
-            tomato: [
-                "./tomato-idle.png",    // Idle stage
+                ],
+                    tomato: [
+                "./tomato-idle.png",   // Idle stage
                 "./tomato-stage1.png", // Stage 1
                 "./tomato-stage2.png", // Stage 2
                 "./tomato-stage3.png", // Stage 3
                 "./tomato-stage4.png"  // Fully grown
-            ]
-        };
+                ]
+            };
 
 
-     // Function to show the tooltip
-     function showTooltip(targetElement, message) {
+    // Function to show the tooltip
+        function showTooltip(targetElement, message) {
         tooltip.textContent = message; // Set tooltip text
         const rect = targetElement.getBoundingClientRect(); // Get button position
         tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2 - tooltip.offsetWidth / 2}px`;
         tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 10}px`; // Position above button
         tooltip.classList.add("show");
 
-        // Hide the tooltip after 2 seconds
-        setTimeout(() => {
-            tooltip.classList.remove("show");
-        }, 2000);
-    }
+            // Hide the tooltip after 2 seconds
+            setTimeout(() => {
+                tooltip.classList.remove("show");
+            }, 2000);
+        }
      
     
-        // Update farmland stage visually
-        function updateStage() {
-            const sprites = crops[selectedCrop];
-            if (growthStage === -1) {
-                farmland.style.backgroundImage = `url(${sprites[0]})`; // Default idle image
+    // Update farmland stage visually
+    function updateStage() {
+        const sprites = crops[selectedCrop];
+                if (growthStage === -1) {
+            farmland.style.backgroundImage = `url(${sprites[0]})`; // Default idle image
                 message.textContent = "Click on the farmland to plant something!";
-            } else {
+                } else {
                 farmland.style.backgroundImage = `url(${sprites[growthStage + 1]})`;
                 if (growthStage === 3) {
                     message.textContent = "The crop is fully grown! Click to harvest.";
