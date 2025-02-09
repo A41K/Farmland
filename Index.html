@@ -75,6 +75,33 @@
             background-color: #000;
             color: white;
         }
+
+        .tooltip {
+        position: relative;
+        display: inline-block;
+    }
+
+    .tooltip .tooltip-text {
+        visibility: hidden;
+        width: 120px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 5px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%; /* Position above the button */
+        left: 50%;
+        margin-left: -60px;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+    }
     </style>
 </head>
 <body>
@@ -103,8 +130,24 @@
         wheatButton.textContent = "W"; // Wheat button
         const tomatoButton = document.createElement('button');
         tomatoButton.textContent = "T"; // Tomato button (requires 50 score)
+        tomatoButton.title = "Costs 50 score"; // Tooltip added here
         shop.appendChild(wheatButton);
         shop.appendChild(tomatoButton);
+
+        
+    // Wrap tomato button in a tooltip container
+    const tomatoTooltip = document.createElement('div');
+    tomatoTooltip.classList.add('tooltip');
+    tomatoTooltip.appendChild(tomatoButton);
+
+    const tooltipText = document.createElement('span');
+    tooltipText.classList.add('tooltip-text');
+    tooltipText.textContent = "Costs 50 score";
+    tomatoTooltip.appendChild(tooltipText);
+
+    shop.appendChild(wheatButton);
+    shop.appendChild(tomatoTooltip);
+
     
         let score = 0;
         let growthStage = -1; // No crop planted initially
@@ -112,6 +155,7 @@
         let upgradeLevel = 0;
         let upgradeCost = 5;
         let selectedCrop = "wheat"; // Default crop is wheat
+        let baseGrowthTime = 10000; // Base growth time: 10 seconds
     
         // Paths to sprites for crops
         const crops = {
@@ -159,7 +203,13 @@
                 } else {
                     clearInterval(growthInterval); // Stop growing when fully grown
                 }
-            }, 10000); // 10 seconds per stage
+            }, calculateGrowthTime()); // Adjust growth time based on upgrades
+        }
+    
+        // Calculate the growth time based on upgrades
+        function calculateGrowthTime() {
+            const reducedTime = upgradeLevel * 500; // Each upgrade reduces 0.5 seconds (500ms)
+            return Math.max(baseGrowthTime - reducedTime, 2000); // Minimum growth time: 2 seconds
         }
     
         // Handle farmland click
@@ -217,6 +267,5 @@
         updateStage(); // Initialize farmland stage
         updateShopButtons(); // Set initial button states
     </script>
-    
 </body>
 </html>
