@@ -42,3 +42,8 @@
     
         console.log("Game has been reset! All progress has been cleared.");
         }
+
+    // Copyright
+    function Copyright() {
+    console.log("Hey! This was made by Andrew a.k.a A41K so Arok Andras. I hope you enjoy my little game :)"); // Confirmation in the console
+}
