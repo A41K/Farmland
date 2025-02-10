@@ -30,6 +30,8 @@
                 updateCropButtons();
                 buyUpgradeButton.textContent = `Buy Upgrade (Cost: ${upgradeCost})`;
                 updateShopButtons();
+                scoreDisplay.textContent = score;
+                prestigeCounter.textContent = `Prestige: ${prestigeCount}`;
                 updateStage();
 
                   // If lawnmower was active, disable its button and show its status

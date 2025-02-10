@@ -58,6 +58,14 @@ body {
     cursor: not-allowed;
 }
 
+.crop-buttons {
+    margin-left: 150px; /* Pushes the Wheat and Tomato buttons to the right */
+    display: flex;
+    gap: 10px; /* Adds spacing between buttons */
+    
+}
+
+
 .footer {
     position: fixed;
     bottom: 0;
@@ -95,19 +103,24 @@ opacity: 1;
 }
 
 /* Add styling for the prestige button */
-.prestige-button {
-background-color: #add8e6; /* Light blue background */
-border: none;
-padding: 10px 20px;
-font-size: 16px;
-color: black;
-border-radius: 5px;
-cursor: pointer;
-margin: 10px auto; /* Center horizontally */
-display: block; /* Block for centering */
-text-align: center;
+.prestige-container {
+    display: flex;
+    justify-content: center; /* Centers the button horizontally */
+    margin-top: 10px; /* Adds spacing from other buttons */
+    width: 100%; /* Ensures it spans the full width */
+    margin-left: 5px;
 }
 
+.prestige-button {
+    background-color: #add8e6;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: black;
+    border-radius: 15px;
+    cursor: pointer;
+}
+    
 .prestige-button:hover {
 background-color: #87ceeb; /* Slightly darker blue on hover */
 }
@@ -123,4 +136,19 @@ background-color: #f0f0f0;
 padding: 5px 10px;
 border-radius: 5px;
 border: 1px solid #bbb;
+}
+
+@media screen and (max-width: 400px) {
+    .crop-buttons {
+        margin-left: 125px;
+        
+    }
+    
+}
+
+@media screen and (max-width: 320px) {
+    .crop-buttons {
+        margin-left: 100px;
+    }
+    
 }

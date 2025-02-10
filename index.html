@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <script src="codes.js"></script>
     <script src="progress.js"></script>
-    <script src="upgrades.js"></script>
     <link rel="icon" type="image/x-icon" href="Favicon.jpg">
 </head>
-
 <body>
     <div class="game-container">
         <div class="farmland" id="farmland"></div>
@@ -20,6 +18,8 @@
             <button id="buyUpgrade" disabled>Buy Upgrade (Cost: 5)</button>
         </div>
     </div>
+    
+
 
     <footer class="footer">
         This was made by Andrew a.k.a A41K
@@ -30,13 +30,15 @@
         const scoreDisplay = document.getElementById('score');
         const message = document.getElementById('message');
         const buyUpgradeButton = document.getElementById('buyUpgrade');
+        const buyLawnmowerButton = document.getElementById('buyLawnmower');
+
     
         // Add crop buttons
         const shop = document.getElementById('shop');
         const wheatButton = document.createElement('button');
         wheatButton.textContent = "W"; // Wheat button
         const tomatoButton = document.createElement('button');
-        tomatoButton.textContent = "T (25)"; // Tomato button (requires 25 score)
+        tomatoButton.textContent = "T"; // Tomato button (requires 25 score)
         const lawnmowerButton = document.createElement('button');
         lawnmowerButton.textContent = "Buy Lawnmower (100)";
         const prestigeButton = document.createElement('button');
@@ -57,7 +59,7 @@
             // Tooltip element
             const tooltip = document.createElement('div');
             tooltip.className = "tooltip-message";
-            tooltip.textContent = ""; // Empty by default
+            tooltip.textContent = "Need 2 Prestige"; // Empty by default
             document.body.appendChild(tooltip);
         
         let score = 0; // Initial score
@@ -236,6 +238,16 @@
         }
     });
 
+    // Create a wrapper div for Prestige button
+    const prestigeContainer = document.createElement('div');
+    prestigeContainer.className = "prestige-container";
+
+    // Append the Prestige button inside the new div
+    prestigeContainer.appendChild(prestigeButton);
+
+    // Append the Prestige button container to the shop
+    shop.appendChild(prestigeContainer);
+
              // Handle lawnmower purchase
              lawnmowerButton.addEventListener('click', () => {
         if (score >= 100) {
@@ -254,7 +266,7 @@
         // Enable or disable shop buttons based on score
         function updateShopButtons() {
             buyUpgradeButton.disabled = score < upgradeCost;
-            tomatoButton.disabled = score < 25 && selectedCrop !== "tomato"; // Disable until score >= 25
+            tomatoButton.disabled = prestigeCount < 2 && selectedCrop !== "tomato"; // Disable until 2 Prestiges
             lawnmowerButton.disabled = lawnmowerActive || score < 100; // Disable if active or not enough score
             prestigeButton.disabled = score < 500; // Disable Prestige button until score >= 500
         }
@@ -268,26 +280,32 @@
         });
     
         tomatoButton.addEventListener('click', () => {
-            if (score >= 25) {
-                selectedCrop = "tomato";
-                updateCropButtons(); // Update button styles
-                updateStage();
-                saveProgress(); // Save after switching crops
-            } else {
-                showTooltip(tomatoButton, "Costs 25 Score"); // Show tooltip when not enough score
-            }
+    if (prestigeCount >= 2) {
+        selectedCrop = "tomato";
+        updateCropButtons(); // Ensure this is called to change button color
+        updateStage();
+        saveProgress(); // Save after switching crops
+    } else {
+        alert("Tomato unlocks after 2 Prestiges!");
+    }
         });
-    
+
+        // Create a wrapper div for Wheat and Tomato buttons
+    const cropButtonContainer = document.createElement('div');
+    cropButtonContainer.className = "crop-buttons";
+
+    // Append Wheat and Tomato buttons to this new div
+    cropButtonContainer.appendChild(wheatButton);
+    cropButtonContainer.appendChild(tomatoButton);
+
+    // Append the crop button container to the shop
+    shop.appendChild(cropButtonContainer);
+
         // Update button styles based on selected crop
         function updateCropButtons() {
-            if (selectedCrop === "wheat") {
-                wheatButton.style.backgroundColor = "#90ee90"; // Highlight wheat button
-                tomatoButton.style.backgroundColor = ""; // Remove highlight from tomato button
-            } else if (selectedCrop === "tomato") {
-                tomatoButton.style.backgroundColor = "#90ee90"; // Highlight tomato button
-                wheatButton.style.backgroundColor = ""; // Remove highlight from wheat button
-            }
-        }
+    wheatButton.style.backgroundColor = selectedCrop === "wheat" ? "#90ee90" : ""; // Highlight wheat
+    tomatoButton.style.backgroundColor = selectedCrop === "tomato" ? "#90ee90" : ""; // Highlight tomato
+}
     
         // Start the game
         loadProgress(); // Load progress on page load
