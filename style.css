@@ -23,7 +23,7 @@ body {
     border-radius: 10px;
     position: relative;
     cursor: pointer;
-    background-image: url("./pixil-frame-0.png"); /* Default idle image */
+    background-image: url("/idle.png"); /* Default idle image */
 }
 
 .score {
@@ -59,7 +59,7 @@ body {
 }
 
 .crop-buttons {
-    margin-left: 90px; /* buttons to the right */
+    margin-left: 75px; /* buttons to the right */
     display: flex;
     gap: 10px; /* Adds spacing between buttons */
     

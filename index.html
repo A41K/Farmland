@@ -87,32 +87,32 @@
             // Paths to sprites for crops
                 const crops = {
                     wheat: [
-                "./wheat-idle.png",     // Idle stage
+                "./idle.png",     // Idle stage
                 "./wheat-stage1.png",   // Stage 1
                 "./wheat-stage2.png",   // Stage 2
                 "./wheat-stage3.png",   // Stage 3
                 "./wheat-stage4.png"    // Fully grown
                 ],
                     tomato: [
-                "./tomato-idle.png",   // Idle stage
+                "./idle.png",   // Idle stage
                 "./tomato-stage1.png", // Stage 1
                 "./tomato-stage2.png", // Stage 2
                 "./tomato-stage3.png", // Stage 3
                 "./tomato-stage4.png"  // Fully grown
                 ],
                     corn: [
-                "./placeholder.png", // Placeholder for future crops
-                "./placeholder.png", // Placeholder for future crops
-                "./placeholder.png", // Placeholder for future crops
-                "./placeholder.png", // Placeholder for future crops
-                "./placeholder.png" // Placeholder for future crops
+                "./idle.png", // Idle stage
+                "./corn.jpg", // Stage 1
+                "./corn.jpg", // Stage 2
+                "./corn.jpg", // Stage 3
+                "./corn.jpg" // Fully grown
                 ],
                     carrot: [
-                "./placeholder.png", // Placeholder for future crops
-                "./placeholder.png", // Placeholder for future crops
-                "./placeholder.png", // Placeholder for future crops 
-                "./placeholder.png", // Placeholder for future crops
-                "./placeholder.png" // Placeholder for future crops
+                "./idle.png", // Idle stage
+                "./carrot-stage1.png", // Stage 1
+                "./carrot-stage2.png", // Stage 2
+                "./carrot-stage3.png", // Stage 3
+                "./carrot-stage4.png" // Fully grown
                 ]
             }; 
     
@@ -152,7 +152,7 @@
         // Calculate the growth time based on upgrades
         function calculateGrowthTime() {
             const reducedTime = upgradeLevel * 500; // Each upgrade reduces 0.5 seconds (500ms)
-            return Math.max(baseGrowthTime - reducedTime, 2000); // Minimum growth time: 2 seconds
+            return Math.max(baseGrowthTime - reducedTime, 300); // Minimum growth time: 0.3 seconds
         }
 
         function harvestAndReplant() {
@@ -218,7 +218,7 @@
         lawnmowerActive = false;
         selectedCrop = "wheat";
         growthStage = -1; // Reset growth
-        prestigeMultiplier *= 2; // Multiply score gain by 2
+        prestigeMultiplier *= 0.5; // Multiply score gain by 0.5
         prestigeCount++; // Increment Prestige count
 
         // Update UI
