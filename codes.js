@@ -16,6 +16,14 @@
         console.log("Fake cheat activated! You lost 1000000 score Congratulations!");
     } 
 
+    // Reset Score
+    function ResetScore() {
+    score = 0; // Reset the score to 0
+    scoreDisplay.textContent = score; // Update the score display
+    updateShopButtons(); // Update the shop buttons based on new score
+    console.log("Score has been reset to 0!"); // Confirmation in the console
+    }
+
    // Prestige Cheat
     function MinusPrestige() {
     prestigeCount += 10; // Add 10 to the Prestige count
@@ -63,4 +71,16 @@
     // Copyright
     function Copyright() {
     console.log("Hey! This was made by Andrew a.k.a A41K so Arok Andras. I hope you enjoy my little game :)"); // Confirmation in the console
-}
+    }
+
+    // DevCommands
+    function DevCommands() {
+    console.log("Here are the available commands:");
+    console.log("MinusScore: Adds 10000 score");
+    console.log("MinusPrestige: Adds 10 Prestige");
+    console.log("ResetScore: Resets the score to 0");
+    console.log("GoBack: Reverts to the last save");
+    console.log("ResetGame: Resets the game to its initial state");
+    console.log("Copyright: Displays the copyright information");
+    console.log("CheatCode: Fake cheat code that reduces score and prestige by 1000000");
+    }

@@ -151,22 +151,23 @@
     
         // Calculate the growth time based on upgrades
         function calculateGrowthTime() {
-            const reducedTime = upgradeLevel * 500; // Each upgrade reduces 0.5 seconds (500ms)
-            return Math.max(baseGrowthTime - reducedTime, 300); // Minimum growth time: 0.3 seconds
+            const reducedTime = upgradeLevel * 100; // Each upgrade reduces 0.1 seconds (100ms)
+            return Math.max(baseGrowthTime - reducedTime, 100); // Minimum growth time: 0.1 seconds
         }
 
         function harvestAndReplant() {
         // Harvest crop
         if (growthStage === 3) {
             if (selectedCrop === "wheat") {
-                score += (1 + upgradeLevel); // Wheat gives 1 score (+ bonus)
-            } else if (selectedCrop === "tomato") {
-                score += (5 + upgradeLevel); // Tomato gives 5 score (+ bonus)
-            } else if (selectedCrop === "corn") {
-                score += (10 + upgradeLevel); // Corn gives 10 score (+ bonus)
-            } else if (selectedCrop === "carrot") {
-                score += (15 + upgradeLevel); // Carrot gives 15 score (+ bonus)
-            }
+            score += wheatBaseScore * prestigeMultiplier * (1 ** upgradeLevel); 
+        } else if (selectedCrop === "tomato") {
+            score += tomatoBaseScore * prestigeMultiplier * (1 ** upgradeLevel);
+        } else if (selectedCrop === "corn") {
+            score += cornBaseScore * prestigeMultiplier * (1 ** upgradeLevel);
+        } else if (selectedCrop === "carrot") {
+            score += carrotBaseScore * prestigeMultiplier * (1 ** upgradeLevel);
+        }
+
 
             scoreDisplay.textContent = score;
 
@@ -180,13 +181,13 @@
         farmland.addEventListener('click', () => {
         if (growthStage === 3) {
             if (selectedCrop === "wheat") {
-                score += wheatBaseScore * prestigeMultiplier * (2 ** upgradeLevel); // Apply prestigeMultiplier
+                score += wheatBaseScore * prestigeMultiplier * (1 ** upgradeLevel); // Apply prestigeMultiplier
             } else if (selectedCrop === "tomato") {
-                score += tomatoBaseScore * prestigeMultiplier * (2 ** upgradeLevel); // Apply prestigeMultiplier
+                score += tomatoBaseScore * prestigeMultiplier * (1 ** upgradeLevel); // Apply prestigeMultiplier
             } else if (selectedCrop === "corn") {
-                score += cornBaseScore * prestigeMultiplier * (2 ** upgradeLevel); // Apply prestigeMultiplier
+                score += cornBaseScore * prestigeMultiplier * (1 ** upgradeLevel); // Apply prestigeMultiplier
             } else if (selectedCrop === "carrot") {
-                score += carrotBaseScore * prestigeMultiplier * (2 ** upgradeLevel); // Apply prestigeMultiplier
+                score += carrotBaseScore * prestigeMultiplier * (1** upgradeLevel); // Apply prestigeMultiplier
             }
             
             scoreDisplay.textContent = score;
@@ -218,7 +219,7 @@
         lawnmowerActive = false;
         selectedCrop = "wheat";
         growthStage = -1; // Reset growth
-        prestigeMultiplier *= 0.5; // Multiply score gain by 0.5
+        prestigeMultiplier *= 1; // Multiply score gain by 0.5
         prestigeCount++; // Increment Prestige count
 
         // Update UI
