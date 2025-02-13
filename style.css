@@ -138,6 +138,40 @@ border-radius: 5px;
 border: 1px solid #bbb;
 }
 
+.help-button {
+    position: fixed;
+    bottom: 50px;
+    left: 10px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+.help-button:hover {
+    background-color: #45a049;
+}
+
+/* Add styles for the help message modal */
+.help-modal {
+    display: none;
+    position: fixed;
+    bottom: 60px;
+    left: 10px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    z-index: 1000;
+    max-width: 250px;
+}
+
 @media screen and (max-width: 400px) {
     .crop-buttons {
         margin-left: 55px;

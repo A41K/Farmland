@@ -19,11 +19,20 @@
         </div>
     </div>
     
-
-
     <footer class="footer">
         This was made by Andrew a.k.a A41K
     </footer>
+
+      <button class="help-button" id="helpButton">Help</button>
+      <div class="help-modal" id="helpModal">
+        <strong>Need Help?</strong>
+        <p>Click the farmland to plant crops. Harvest them for points!</p>
+        <p>Buy upgrades to grow crops faster and earn more points.</p>
+        <p>Unlock new crops with higher prestige levels.</p>
+        <p>Buy the lawnmower to automatically harvest and replant crops.</p>
+        <p>W=Wheat, T=Tomato, C=Corn, R=Carrot</p>
+          <button onclick="document.getElementById('helpModal').style.display='none';">Close</button>
+      </div>  
 
     <script>
         const farmland = document.getElementById('farmland');
@@ -36,7 +45,7 @@
         // Add crop buttons
         const shop = document.getElementById('shop');
         const wheatButton = document.createElement('button');
-        wheatButton.textContent = "W"; // Wheat button
+        wheatButton.textContent = "W"; // Wheat button (base)
         const tomatoButton = document.createElement('button');
         tomatoButton.textContent = "T"; // Tomato button (requires 2 prestige)
         const cornButton = document.createElement('button');
@@ -87,32 +96,32 @@
             // Paths to sprites for crops
                 const crops = {
                     wheat: [
-                "./idle.png",     // Idle stage
-                "./wheat-stage1.png",   // Stage 1
-                "./wheat-stage2.png",   // Stage 2
-                "./wheat-stage3.png",   // Stage 3
-                "./wheat-stage4.png"    // Fully grown
+                "./crops/idle.png",     // Idle stage
+                "./crops/wheat-stage1.png",   // Stage 1
+                "./crops/wheat-stage2.png",   // Stage 2
+                "./crops/wheat-stage3.png",   // Stage 3
+                "./crops/wheat-stage4.png"    // Fully grown
                 ],
                     tomato: [
-                "./idle.png",   // Idle stage
-                "./tomato-stage1.png", // Stage 1
-                "./tomato-stage2.png", // Stage 2
-                "./tomato-stage3.png", // Stage 3
-                "./tomato-stage4.png"  // Fully grown
+                "./crops/idle.png",   // Idle stage
+                "./crops/tomato-stage1.png", // Stage 1
+                "./crops/tomato-stage2.png", // Stage 2
+                "./crops/tomato-stage3.png", // Stage 3
+                "./crops/tomato-stage4.png"  // Fully grown
                 ],
                     corn: [
-                "./idle.png", // Idle stage
-                "./corn.jpg", // Stage 1
-                "./corn.jpg", // Stage 2
-                "./corn.jpg", // Stage 3
-                "./corn.jpg" // Fully grown
+                "./crops/idle.png", // Idle stage
+                "./crops/corn.jpg", // Stage 1
+                "./crops/corn.jpg", // Stage 2
+                "./crops/corn.jpg", // Stage 3
+                "./crops/corn.jpg" // Fully grown
                 ],
                     carrot: [
-                "./idle.png", // Idle stage
-                "./carrot-stage1.png", // Stage 1
-                "./carrot-stage2.png", // Stage 2
-                "./carrot-stage3.png", // Stage 3
-                "./carrot-stage4.png" // Fully grown
+                "./crops/idle.png", // Idle stage
+                "./crops/carrot-stage1.png", // Stage 1
+                "./crops/carrot-stage2.png", // Stage 2
+                "./crops/carrot-stage3.png", // Stage 3
+                "./crops/carrot-stage4.png" // Fully grown
                 ]
             }; 
     
@@ -355,6 +364,14 @@
     cornButton.style.backgroundColor = selectedCrop === "corn" ? "#90ee90" : ""; // Highlight corn
     carrotButton.style.backgroundColor = selectedCrop === "carrot" ? "#90ee90" : ""; // Highlight carrot
 }
+
+  // Add event listener to display the help modal
+  const helpButton = document.getElementById('helpButton');
+    const helpModal = document.getElementById('helpModal');
+
+    helpButton.addEventListener('click', () => {            
+    helpModal.style.display = 'block';
+    });
     
         // Start the game
         loadProgress(); // Load progress on page load
