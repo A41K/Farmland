@@ -12,6 +12,8 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    flex-wrap: wrap; /* Allow farmlands to wrap on new rows */
+    gap: 10px; /* Add spacing between farmlands */
 }
 
 .farmland {

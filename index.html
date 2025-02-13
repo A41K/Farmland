@@ -18,6 +18,7 @@
             <button id="buyUpgrade" disabled>Buy Upgrade (Cost: 5)</button>
         </div>
     </div>
+
     
     <footer class="footer">
         This was made by Andrew a.k.a A41K
@@ -85,6 +86,8 @@
         let baseGrowthTime = 5000; // Base growth time: 5 seconds
         let prestigeMultiplier = 1; // Start with no multiplier
         let prestigeCount = 0; // Track number of prestiges
+        let addFarmlandButton; // Declare globally
+
 
 
         let wheatBaseScore = 1; // Base score for wheat
@@ -365,14 +368,6 @@
     carrotButton.style.backgroundColor = selectedCrop === "carrot" ? "#90ee90" : ""; // Highlight carrot
 }
 
-  // Add event listener to display the help modal
-  const helpButton = document.getElementById('helpButton');
-    const helpModal = document.getElementById('helpModal');
-
-    helpButton.addEventListener('click', () => {            
-    helpModal.style.display = 'block';
-    });
-    
         // Start the game
         loadProgress(); // Load progress on page load
         updateStage(); // Initialize farmland stage

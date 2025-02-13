@@ -74,7 +74,7 @@
     }
 
     // DevCommands
-    function DevCommands() {
+    function NotDevCommands() {
     console.log("Here are the available commands:");
     console.log("MinusScore: Adds 10000 score");
     console.log("MinusPrestige: Adds 10 Prestige");
