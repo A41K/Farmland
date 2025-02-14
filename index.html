@@ -187,7 +187,7 @@
             growthStage = 0; // Reset growth to Stage 0
             updateStage();
         }
-    }
+     }
     
         // Handle farmland click
         farmland.addEventListener('click', () => {
@@ -249,7 +249,7 @@
     } else {
         message.textContent = `You need ${prestigeRequirement} score to Prestige!`;
     }
-});
+    });
 
     
         // Handle shop upgrades
@@ -293,7 +293,7 @@
         } else {
             message.textContent = "You need 100 score to buy the lawnmower!";
         }
-    });
+      });
     
         // Enable or disable shop buttons based on score
         function updateShopButtons() {
@@ -361,12 +361,12 @@
     shop.appendChild(cropButtonContainer);
 
         // Update button styles based on selected crop
-        function updateCropButtons() {
+    function updateCropButtons() {
     wheatButton.style.backgroundColor = selectedCrop === "wheat" ? "#90ee90" : ""; // Highlight wheat
     tomatoButton.style.backgroundColor = selectedCrop === "tomato" ? "#90ee90" : ""; // Highlight tomato
     cornButton.style.backgroundColor = selectedCrop === "corn" ? "#90ee90" : ""; // Highlight corn
     carrotButton.style.backgroundColor = selectedCrop === "carrot" ? "#90ee90" : ""; // Highlight carrot
-}
+    }
 
         // Start the game
         loadProgress(); // Load progress on page load
