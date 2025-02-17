@@ -216,6 +216,13 @@
         }
     });
 
+   // Add event listener to display the help modal
+  const helpButton = document.getElementById('helpButton');
+    const helpModal = document.getElementById('helpModal');
+    helpButton.addEventListener('click', () => {            
+    helpModal.style.display = 'block';
+    });
+        
       // Handle Prestige
    prestigeButton.addEventListener('click', () => {
     // Calculate the current Prestige requirement
